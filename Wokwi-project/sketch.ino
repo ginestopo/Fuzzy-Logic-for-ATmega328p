@@ -19,6 +19,10 @@
 #define ECHO 5
 #define LED 6
 
+// LDR Characteristics
+const float GAMMA = 0.7;
+const float RL10 = 50;
+
 #include <Servo.h>
 
 Servo myservo;  // create servo object to control a servo
@@ -48,22 +52,22 @@ void setup() {
   FuzzySet *bigDepth = new FuzzySet(120, 180, 180, 240);
   FuzzySet *verybigDepth = new FuzzySet(180, 240, 400, 400);
   
-  // ldr (Potentiometer) (0-1023 in wokwi)
-  // Illumination ldr (0-100000 lux=> 1015-8 resistance value in wokwi)
+  // ldr (Potentiometer)
+  // Illumination ldr (0-100000 lux after conversion)
   FuzzySet *lowldr = new FuzzySet(0, 0, 0, 100);
-  FuzzySet *medldr = new FuzzySet(60, 200, 500, 700);
-  FuzzySet *highldr = new FuzzySet(400 ,700, 1015, 1015);
+  FuzzySet *medldr = new FuzzySet(60, 300, 500, 700);
+  FuzzySet *highldr = new FuzzySet(500 ,700, 10000, 10000);
 
   // Water quality
   FuzzySet *badQ = new FuzzySet(0, 0, 0, 100);
   FuzzySet *medQ = new FuzzySet(60, 200, 500, 700);
-  FuzzySet *highQ = new FuzzySet(400 ,700, 1015, 1015);
+  FuzzySet *highQ = new FuzzySet(400 ,700, 1015, 10000);
 
   // Adequacy of water conditions (index)
   FuzzySet *bad = new FuzzySet(0, 0, 0, 0);
   FuzzySet *medium = new FuzzySet(0, 0, 10, 40);
   FuzzySet *good = new FuzzySet(22, 40, 62, 80);
-  FuzzySet *verygood = new FuzzySet(62, 92, 100, 100);
+  FuzzySet *verygood = new FuzzySet(62, 92, 600, 600);
 
   // variables
   // variable water depth with universe 0-400 as input
@@ -157,9 +161,13 @@ int distance() {
   return pulse * 10 / 292;
 }
 
-// returns the brightness
+// returns the brightness by making a conversion to luxes
 int brightness() {
-  return analogRead(LDR);
+  int analogValue = analogRead(LDR);
+  float voltage = analogValue / 1024. * 5;
+  float resistance = 2000 * voltage / (1 - voltage / 5);
+  float lux = pow(RL10 * 1e3 * pow(10, GAMMA) / resistance, (1 / GAMMA));
+  return lux;
 }
 
 
