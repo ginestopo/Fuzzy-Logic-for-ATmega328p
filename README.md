@@ -3,10 +3,10 @@
 \
 
 
-[Link al proyecto Wokwi](https://wokwi.com/projects/434204445654407169)
+[Try the Wokwi project here!](https://wokwi.com/projects/434204445654407169)
 ---
 
-\
+
 \
 With this activity, we will work with different techniques to improve a system for measuring, controlling, actuating, and presenting climate data in a local HMI through intelligent supervision.
 
@@ -30,7 +30,7 @@ After an internal debate, it was concluded that for the hardware we are targetin
 
 
 ---
-\
+
 
 To carry out the implementation, we will make use of the [EFLL](https://github.com/alvesoaj/eFLL) library available for Wokwi.
 
