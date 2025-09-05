@@ -1,45 +1,47 @@
 
-# Actividad 3 (grupal) - Equipos e Intrumentación Electrónica
+# Fuzzy-Logic-for-ATmega328p
 \
-**Miembros del grupo**
-- Garzón Fernández, **Carlos Enrique**
-- Alonso Cabal, **Patricia**
-- Díaz Chamorro, **Ginés**
+
 
 [Link al proyecto Wokwi](https://wokwi.com/projects/434204445654407169)
 ---
 
 \
 \
-Con esta actividad manejaremos diferentes técnicas para perfeccionar un sistema de medición, control, actuación y presentación del clima en una HMI local mediante supervisión inteligente. 
+With this activity, we will work with different techniques to improve a system for measuring, controlling, actuating, and presenting climate data in a local HMI through intelligent supervision.
 
-Concretamente nos centraremos en la implementación de **lógica fuzzy**. Por definición, la lógica difusa (también llamada lógica borrosa (en inglés: fuzzy logic) es una lógica paraconsistente multivaluada en la cual los valores de verdad de las variables pueden ser cualquier número real comprendido entre 0 y 1. La lógica difusa (fuzzy logic, en inglés) permite tomar decisiones más o menos intensas en función de grados intermedios de cumplimiento de una premisa; se adapta mejor al mundo real en el que vivimos, e incluso puede comprender y funcionar con nuestras expresiones, del tipo «hace mucho calor», «no es muy alto», «el ritmo del corazón está un poco acelerado», etc.
+Specifically, we will focus on the implementation of fuzzy logic. By definition, fuzzy logic (also called approximate reasoning) is a multivalued paraconsistent logic in which the truth values of variables can be any real number between 0 and 1. Fuzzy logic allows decisions to be made with varying degrees of intensity depending on intermediate levels of fulfillment of a premise; it adapts better to the real world in which we live, and can even understand and operate with our expressions, such as “it is very hot,” “he is not very tall,” or “the heartbeat is a little fast,” etc.
 
 
 \
 ![Fuzzy Logic](https://media.geeksforgeeks.org/wp-content/uploads/fuzzy-logic_1.png)
 
 \
-En este caso la lógica difusa se aplicará al caso de una boya meteorológica. Tras un poco de *research* por parte del equipo, encontramos [un paper](https://ambiental.cedex.es/docs/ingenieria-civil-138-2005-fuzzy-logic.pdf) interesante que nos ha inspirado a aplicar lógica difusa en nuestra boya meteorológica para el estudio de ecosistemas submarinos. Hasta la fecha, la simulación de los habitata acuáticos se había venido desarrollando por medio de modelos basados en curvas de preferencia de las principales variables hidráulicas relacionadas con la calidad de los hábitats. La lógica difusa ofrece varias ventajas frente a implementaciones clásicas. Con ella, se permite introducir un mayor número de variables. Estas, aumentan de forma significativa las posibilidades de combinación entre ellas, lo que nos lleva a incorporar el conocimiento y valoración de expertos de forma efectiva. 
+In this case, fuzzy logic will be applied to the case of a meteorological buoy. After some research carried out by the team, I found [a paper](https://ambiental.cedex.es/docs/ingenieria-civil-138-2005-fuzzy-logic.pdf) 
+that inspired us to apply fuzzy logic to our meteorological buoy for the study of underwater ecosystems. Up to now, the simulation of aquatic habitats had been developed through models based on preference curves of the main hydraulic variables related to habitat quality. Fuzzy logic offers several advantages over classical implementations. With it, a larger number of variables can be introduced. These significantly increase the possibilities of combination among them, allowing us to effectively incorporate expert knowledge and assessment.
 
-Tras un debate interno, se llegó a la conclusión de que para el hardware al que estamos destinados, lo mejor sería usar la combinación de los siguientes sensores:
+After an internal debate, it was concluded that for the hardware we are targeting, the best approach would be to use the combination of the following sensors:
 
-- Sensor de distancia para la profundidad del agua.
-- Sensor de luz (sensor de luminosidad).
-- Sensor de calidad del agua.
+- Distance sensor for water depth.
+
+- Light sensor (luminosity sensor).
+
+- Water quality sensor.
 
 
 ---
 \
-Para llevar a cabo la implementación, haremos uso de la librería [EFLL](https://github.com/alvesoaj/eFLL) disponible para Wokwi.
 
-Lo primero es definir los rangos para cada uno de los sensores que vamos a usar. Sabiendo los valores de lectura de cada uno de ellos, podemos saber qué regiones vamos a establecer para la función de pertenencia de cada uno de ellos, que tendrá forma trapezoidal.
+To carry out the implementation, we will make use of the [EFLL](https://github.com/alvesoaj/eFLL) library available for Wokwi.
 
-A continuación puede verse la primera estimación realizada por el equipo para cada sensor, así como sus regiones.
+The first step is to define the ranges for each of the sensors we are going to use. By knowing the reading values of each one of them, we can determine which regions we are going to establish for the membership function of each sensor, which will have a trapezoidal shape.
+
+Below you can see the first estimation made by the team for each sensor, as well as their regions.
 
 ![Belonging function](images/belonging_function.png)
 
-A continuación se muestra el código empleado que, mediante la librería de Fuzzy Logic, nos permite implementar estas regiones.
+Below is the code used which, through the Fuzzy Logic library, allows us to implement these regions.
+
 
 ```C
   // fuzzy sets
@@ -67,8 +69,7 @@ A continuación se muestra el código empleado que, mediante la librería de Fuz
   FuzzySet *verygood = new FuzzySet(62, 92, 100, 600);
 ```
 
-Por último, tenemos que especificar las reglas que van a dar lugar a nuestras salidas, haciendo uso de la propia lógica Fuzzy. Estas reglas se definen a continuación y vienen inspiradas por el paper anteriormente mencionado.
-
+Finally, we need to specify the rules that will determine our outputs, making use of Fuzzy Logic itself. These rules are defined below and are inspired by the previously mentioned paper.
 
 ```C
   // Rule 1
@@ -120,6 +121,6 @@ Por último, tenemos que especificar las reglas que van a dar lugar a nuestras s
 
 ```
 
-A continuación, se muestra el ejemplo funcionando mediante lógica Fuzzy al establecer parámetros propicios para ecosistemas marinos.
+Below is an example of the system in operation using Fuzzy Logic, with parameters set to be favorable for marine ecosystems.
 
 ![simulation](images/simulation.png)
